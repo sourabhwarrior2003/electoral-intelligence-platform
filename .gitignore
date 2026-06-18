@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Node
+node_modules/
+dist/
+
+# Project Output
+output/
+pdfs/
+ocr_cards/
+
+# Logs
+logs/
+backend/logs/
+
+# Debug Files
+debug_records.csv
+structure.txt
+temp_*.png
+
+# OS Files
+Thumbs.db
+.DS_Store
+
+# Generated files
+backend/output
+backend/pdf
+backend/progress.json
+
+# OCR outputs
+frontend/card_ocr_summary.csv
+
+# Duplicate project
+vite/

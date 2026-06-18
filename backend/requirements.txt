@@ -1,0 +1,11 @@
+flask
+pandas
+pdf2image
+pytesseract
+opencv-python
+fuzzywuzzy
+python-Levenshtein
+sentence-transformers
+geopandas
+plotly
+Pillow
