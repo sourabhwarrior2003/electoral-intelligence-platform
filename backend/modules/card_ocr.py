@@ -5,12 +5,15 @@ import numpy as np
 import pandas as pd
 import os
 from modules.card_parser import parse_card_text
+from concurrent.futures import ProcessPoolExecutor
 
 
 
 def pdf_page_to_image(page, dpi=300):
 
-    pix = page.get_pixmap(dpi=dpi)
+    pix = page.get_pixmap(
+        dpi=dpi
+    )
 
     img = np.frombuffer(
         pix.samples,
@@ -22,13 +25,13 @@ def pdf_page_to_image(page, dpi=300):
     )
 
     if pix.n == 4:
+
         img = cv2.cvtColor(
             img,
             cv2.COLOR_BGRA2BGR
         )
 
     return img
-
 
 def detect_voter_cards(image):
 
@@ -102,7 +105,6 @@ def ocr_card(card_img):
     )
 
     return text.strip()
-
 
 def main():
 
@@ -190,6 +192,47 @@ def main():
     )
     print("card_ocr_summary.csv")
     print("ocr_cards folder")
+    
+
+def process_page(args):
+
+    pdf_path, page_no = args
+
+    doc = fitz.open(pdf_path)
+
+    page = doc[page_no]
+
+    image = pdf_page_to_image(page)
+
+    boxes = detect_voter_cards(image)
+
+    print(
+        f"Page {page_no + 1} -> "
+        f"{len(boxes)} cards"
+    )
+
+    page_records = []
+
+    for x, y, w, h in boxes:
+
+        card = image[
+            y:y+h,
+            x:x+w
+        ]
+
+        text = ocr_card(card)
+
+        if not text.strip():
+            continue
+
+        record = parse_card_text(text)
+
+        if record:
+            page_records.append(record)
+
+    doc.close()
+
+    return page_records
 
 def extract_cards_from_pdf(pdf_path):
 
@@ -198,37 +241,42 @@ def extract_cards_from_pdf(pdf_path):
 
     doc = fitz.open(pdf_path)
 
+    total_pages = len(doc)
+
+    doc.close()
+
+    tasks = [
+
+        (pdf_path, page_no)
+
+        for page_no in range(total_pages)
+
+    ]
+
     all_records = []
 
-    for page_no, page in enumerate(doc, start=1):
+    print("\nStarting Parallel OCR...\n")
 
-        image = pdf_page_to_image(page)
+    with ProcessPoolExecutor(
+        max_workers=10
+    ) as executor:
 
-        boxes = detect_voter_cards(image)
-
-        print(
-            f"Page {page_no} -> "
-            f"{len(boxes)} cards"
+        results = executor.map(
+            process_page,
+            tasks
         )
 
-        for x, y, w, h in boxes:
+        for page_records in results:
 
-            card = image[
-                y:y+h,
-                x:x+w
-            ]
+            all_records.extend(
+                page_records
+            )
 
-            text = ocr_card(card)
-
-            if not text.strip():
-                continue
-
-            record = parse_card_text(text)
-
-            if record:
-                all_records.append(record)
+    print(
+        f"\nTOTAL RECORDS: "
+        f"{len(all_records)}"
+    )
 
     return all_records
-
 if __name__ == "__main__":
     main()

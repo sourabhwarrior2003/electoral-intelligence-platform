@@ -249,7 +249,16 @@ def serve_output(
 # ==========================
 
 if __name__ == "__main__":
+    
+    if __name__ == "__main__":
+
+     import multiprocessing
+
+    multiprocessing.freeze_support()
 
     app.run(
-        debug=True
+        host="0.0.0.0",
+        port=5000,
+        debug=False,
+        use_reloader=False
     )

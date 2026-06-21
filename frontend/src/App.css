@@ -10,7 +10,12 @@ body{
   color:white;
 }
 
+#root{
+  width:100%;
+}
+
 .app{
+  width:100%;
   min-height:100vh;
 
   background:
@@ -19,19 +24,23 @@ body{
     #2563eb 0%,
     #0f172a 45%
   );
+
+  display:flex;
+  justify-content:center;
 }
 
 .hero{
-  min-height:100vh;
+  width:100%;
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   padding:40px;
 }
 
 .hero-content{
   width:100%;
-  max-width:1300px;
+  max-width:1400px;
+  margin:0 auto;
   text-align:center;
 }
 
@@ -62,19 +71,15 @@ body{
 }
 
 .upload-card{
-
+  width:100%;
   max-width:850px;
-  margin:auto;
+  margin:0 auto;
 
-  background:
-  rgba(255,255,255,.08);
+  background:rgba(255,255,255,.08);
 
-  border:
-  1px solid
-  rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.15);
 
-  backdrop-filter:
-  blur(20px);
+  backdrop-filter:blur(20px);
 
   border-radius:24px;
 
@@ -100,11 +105,7 @@ body{
 }
 
 .file-box{
-
-  border:
-  2px dashed
-  rgba(255,255,255,.3);
-
+  border:2px dashed rgba(255,255,255,.3);
   padding:30px;
   border-radius:18px;
   text-align:center;
@@ -115,24 +116,16 @@ body{
 }
 
 .upload-btn{
-
   width:100%;
-
   padding:18px;
-
   border:none;
-
   border-radius:14px;
-
   background:#2563eb;
-
   color:white;
-
   font-size:18px;
-
   font-weight:700;
-
   cursor:pointer;
+  transition:.3s;
 }
 
 .upload-btn:hover{
@@ -140,16 +133,10 @@ body{
 }
 
 .processing-card{
-
   margin-top:20px;
-
   padding:20px;
-
   border-radius:16px;
-
-  background:
-  rgba(255,255,255,.08);
-
+  background:rgba(255,255,255,.08);
   backdrop-filter:blur(10px);
 }
 
@@ -167,88 +154,117 @@ body{
   color:#38bdf8;
 }
 
-.stats{
+/* Stats Section */
 
+.stats{
   margin-top:40px;
 
   display:grid;
 
   grid-template-columns:
-  repeat(4,1fr);
+  repeat(auto-fit,minmax(220px,1fr));
 
   gap:20px;
 }
 
 .stat-card{
-
-  background:
-  rgba(255,255,255,.08);
-
+  background:rgba(255,255,255,.08);
   padding:25px;
-
   border-radius:18px;
-
   backdrop-filter:blur(10px);
 }
 
 .stat-number{
-
   font-size:36px;
-
   font-weight:700;
-
   color:#38bdf8;
 }
 
 .stat-label{
-
   margin-top:8px;
-
   color:#cbd5e1;
 }
 
-.charts-grid{
+/* Charts Section */
 
+.charts-grid{
   margin-top:40px;
 
   display:grid;
 
   grid-template-columns:
-  repeat(auto-fit,minmax(400px,1fr));
+  repeat(auto-fit,minmax(420px,420px));
+
+  justify-content:center;
 
   gap:25px;
 }
 
-.chart-card{
-
-  background:
-  rgba(255,255,255,.08);
-
-  padding:20px;
-
-  border-radius:20px;
-
-  backdrop-filter:blur(10px);
+.chart-card {
+  background: rgba(255,255,255,.08);
+  padding: 24px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  min-height: 450px;
+}
+.chart-card h2{
+  text-align:center;
+  margin-bottom:20px;
+  font-size:24px;
+  font-weight:700;
 }
 
-.chart-card h2{
+.recharts-responsive-container{
+  margin:auto;
+}
 
-  margin-bottom:20px;
+/* Mobile */
 
-  font-size:20px;
+@media(max-width:992px){
+
+  .hero-title{
+    font-size:52px;
+  }
+
+  .charts-grid{
+    grid-template-columns:1fr;
+  }
+
+  .chart-card{
+    width:100%;
+  }
 }
 
 @media(max-width:768px){
+
+  .hero{
+    padding:20px;
+  }
 
   .hero-title{
     font-size:42px;
   }
 
+  .hero-subtitle{
+    font-size:18px;
+  }
+
+  .upload-card{
+    padding:25px;
+  }
+
   .stats{
     grid-template-columns:1fr 1fr;
   }
+}
 
-  .charts-grid{
+@media(max-width:480px){
+
+  .stats{
     grid-template-columns:1fr;
+  }
+
+  .hero-title{
+    font-size:34px;
   }
 }
